@@ -1,3 +1,4 @@
+<!-- checkout.html - Com máscaras aplicadas -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -9,127 +10,33 @@
 </head>
 <body>
   <div class="container">
-    <h2>Assinar Plano Villa Geyer</h2>
+    <h2>Assinar Plano de Fidelidade</h2>
 
-    <form id="form-assinatura">
-      <input type="text" name="name" placeholder="Nome completo" required />
+    <form action="/assinar" method="POST">
+      <input type="text" name="nome" placeholder="Nome completo" required />
       <input type="email" name="email" placeholder="E-mail" required />
       <input type="text" id="cpf" name="cpf" placeholder="CPF" required />
-      <input type="text" id="phone" name="phone" placeholder="Telefone" required />
-
-      <hr style="margin: 20px 0;" />
-
-      <input type="text" id="cardNumber" placeholder="Número do cartão" required />
-      <input type="text" id="expiryMonth" placeholder="Mês de validade (ex: 05)" required />
-      <input type="text" id="expiryYear" placeholder="Ano de validade (ex: 2026)" required />
-      <input type="text" id="ccv" placeholder="Código de segurança (CVV)" required />
-
+      <input type="text" id="telefone" name="telefone" placeholder="Telefone" required />
+      
       <small style="display:block; margin-top:10px; color:#666; font-size:14px;">
-        Seus dados estão seguros e o pagamento será processado via Asaas.
+        Após clicar em "Assinar Agora", você será redirecionado para uma página segura do Asaas para finalizar o pagamento.
       </small>
 
       <button type="submit" style="margin-top: 20px;">Assinar Agora</button>
     </form>
   </div>
 
-  <!-- Script da Biblioteca do Asaas -->
-  <script src="https://sandbox.asaas.com/lib/asaas-embedded.min.js"></script>
-
-  <!-- Scripts personalizados -->
+  <!-- Biblioteca de máscara -->
+  <script src="https://unpkg.com/imask"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const form = document.getElementById("form-assinatura");
+    // Máscara para CPF
+    IMask(document.getElementById('cpf'), {
+      mask: '000.000.000-00'
+    });
 
-      // Mascarar CPF
-      const cpfInput = document.getElementById('cpf');
-      cpfInput.addEventListener('input', function () {
-        let cpf = cpfInput.value.replace(/\D/g, '');
-        cpf = cpf.slice(0, 11);
-        cpfInput.value = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, function (match, p1, p2, p3, p4) {
-          return `${p1}.${p2}.${p3}-${p4}`;
-        });
-      });
-
-      // Mascarar Telefone
-      const phoneInput = document.getElementById('phone');
-      phoneInput.addEventListener('input', function () {
-        let phone = phoneInput.value.replace(/\D/g, '');
-        phone = phone.slice(0, 11);
-        if (phone.length <= 10) {
-          phoneInput.value = phone.replace(/(\d{2})(\d{4})(\d{0,4})/, function (match, p1, p2, p3) {
-            return `(${p1}) ${p2}-${p3}`;
-          });
-        } else {
-          phoneInput.value = phone.replace(/(\d{2})(\d{5})(\d{0,4})/, function (match, p1, p2, p3) {
-            return `(${p1}) ${p2}-${p3}`;
-          });
-        }
-      });
-
-      // Validação e envio
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const name = form.name.value.trim();
-        const email = form.email.value.trim();
-        const cpf = form.cpf.value.replace(/\D/g, "");
-        const phone = form.phone.value.replace(/\D/g, "");
-        const cardNumber = document.getElementById("cardNumber").value.replace(/\s/g, "");
-        const expiryMonth = document.getElementById("expiryMonth").value.trim();
-        const expiryYear = document.getElementById("expiryYear").value.trim();
-        const ccv = document.getElementById("ccv").value.trim();
-
-        // Validações de segurança
-        if (name.split(" ").length < 2) return alert("Digite seu nome completo.");
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return alert("Digite um e-mail válido.");
-        if (!/^\d{11}$/.test(cpf)) return alert("CPF inválido. Deve conter 11 números.");
-        if (phone.length < 10 || phone.length > 11) return alert("Número de telefone inválido.");
-        if (!/^\d{16}$/.test(cardNumber)) return alert("Número do cartão inválido. Deve conter 16 dígitos.");
-        if (!/^\d{2}$/.test(expiryMonth) || Number(expiryMonth) < 1 || Number(expiryMonth) > 12) return alert("Mês inválido.");
-        
-        const currentYear = new Date().getFullYear();
-        const fullYear = Number(expiryYear.length === 2 ? '20' + expiryYear : expiryYear);
-        if (isNaN(fullYear) || fullYear < currentYear) return alert("Ano de validade inválido.");
-        if (!/^\d{3}$/.test(ccv)) return alert("Código de segurança inválido.");
-
-        // Criação do token do cartão
-        const cardData = {
-          number: cardNumber,
-          expiryMonth,
-          expiryYear,
-          ccv
-        };
-
-        Asaas.createCardToken(cardData, async function (response) {
-          if (response && response.id) {
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            data.cardToken = response.id;
-
-            try {
-              const result = await fetch("/finalizar-assinatura", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-              });
-
-              const json = await result.json();
-              if (json.redirectUrl) {
-                window.location.href = json.redirectUrl;
-              } else {
-                alert("❌ Erro ao redirecionar. Veja o console.");
-              }
-
-            } catch (err) {
-              console.error("❌ Erro na requisição:", err);
-              alert("Erro ao conectar com o servidor.");
-            }
-          } else {
-            console.error("❌ Token do cartão inválido:", response);
-            alert("Erro ao gerar token. Verifique os dados do cartão.");
-          }
-        });
-      });
+    // Máscara para telefone
+    IMask(document.getElementById('telefone'), {
+      mask: '(00) 00000-0000'
     });
   </script>
 </body>
