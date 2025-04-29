@@ -14,8 +14,8 @@
     <form id="form-assinatura">
       <input type="text" name="name" placeholder="Nome completo" required />
       <input type="email" name="email" placeholder="E-mail" required />
-      <input type="text" name="cpf" placeholder="CPF" required />
-      <input type="text" name="phone" placeholder="Telefone" required />
+      <input type="text" id="cpf" name="cpf" placeholder="CPF" required />
+      <input type="text" id="phone" name="phone" placeholder="Telefone" required />
 
       <hr style="margin: 20px 0;" />
 
@@ -32,13 +32,41 @@
     </form>
   </div>
 
-  <!-- Script do Asaas -->
+  <!-- Script da Biblioteca do Asaas -->
   <script src="https://sandbox.asaas.com/lib/asaas-embedded.min.js"></script>
 
+  <!-- Scripts personalizados -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const form = document.getElementById("form-assinatura");
 
+      // Mascarar CPF
+      const cpfInput = document.getElementById('cpf');
+      cpfInput.addEventListener('input', function () {
+        let cpf = cpfInput.value.replace(/\D/g, '');
+        cpf = cpf.slice(0, 11);
+        cpfInput.value = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, function (match, p1, p2, p3, p4) {
+          return `${p1}.${p2}.${p3}-${p4}`;
+        });
+      });
+
+      // Mascarar Telefone
+      const phoneInput = document.getElementById('phone');
+      phoneInput.addEventListener('input', function () {
+        let phone = phoneInput.value.replace(/\D/g, '');
+        phone = phone.slice(0, 11);
+        if (phone.length <= 10) {
+          phoneInput.value = phone.replace(/(\d{2})(\d{4})(\d{0,4})/, function (match, p1, p2, p3) {
+            return `(${p1}) ${p2}-${p3}`;
+          });
+        } else {
+          phoneInput.value = phone.replace(/(\d{2})(\d{5})(\d{0,4})/, function (match, p1, p2, p3) {
+            return `(${p1}) ${p2}-${p3}`;
+          });
+        }
+      });
+
+      // Validação e envio
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
@@ -64,7 +92,7 @@
         if (isNaN(fullYear) || fullYear < currentYear) return alert("Ano de validade inválido.");
         if (!/^\d{3}$/.test(ccv)) return alert("Código de segurança inválido.");
 
-        // Tokenizar cartão com Asaas
+        // Criação do token do cartão
         const cardData = {
           number: cardNumber,
           expiryMonth,
@@ -94,7 +122,7 @@
 
             } catch (err) {
               console.error("❌ Erro na requisição:", err);
-              alert("Erro ao se comunicar com o servidor.");
+              alert("Erro ao conectar com o servidor.");
             }
           } else {
             console.error("❌ Token do cartão inválido:", response);
