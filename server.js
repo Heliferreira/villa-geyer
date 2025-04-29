@@ -125,7 +125,8 @@ app.post('/finalizar-assinatura', async (req, res) => {
 });
 
 // 🚀 Iniciar servidor
-app.listen(3000, () => {
-  console.log('✅ Servidor rodando em http://localhost:3000');
-  console.log('🔐 API KEY carregada:', process.env.ASAAS_API_KEY);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`✅ Servidor rodando na porta ${PORT}`);
 });
+
