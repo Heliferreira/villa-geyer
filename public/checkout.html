@@ -24,17 +24,25 @@
   </div>
 
   <script>
+    const cpf = document.getElementById("cpf");
+    const telefone = document.getElementById("telefone");
+  
     // Máscara CPF
-    cpf.oninput = () => {
-      let v = cpf.value.replace(/\D/g, "");
-      cpf.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-    };
-
+    cpf.addEventListener("input", () => {
+      let v = cpf.value.replace(/\D/g, "").slice(0, 11);
+      cpf.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, (_, p1, p2, p3, p4) => {
+        return `${p1}.${p2}.${p3}-${p4}`;
+      });
+    });
+  
     // Máscara Telefone
-    telefone.oninput = () => {
-      let v = telefone.value.replace(/\D/g, "");
-      telefone.value = v.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
-    };
+    telefone.addEventListener("input", () => {
+      let v = telefone.value.replace(/\D/g, "").slice(0, 11);
+      if (v.length <= 10) {
+        telefone.value = v.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+      } else {
+        telefone.value = v.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+      }
+    });
   </script>
-</body>
-</html>
+  
