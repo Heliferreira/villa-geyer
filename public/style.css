@@ -1,71 +1,59 @@
-/* style.css - Estilo unificado para as páginas do Villa Geyer */
-
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background-color: #f3eee8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: #3e3023;
-  }
-  
-  .container {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    max-width: 480px;
-    width: 90%;
-    text-align: center;
-  }
-  
-  h2 {
-    margin-bottom: 16px;
-    color: #5a3b2e;
-  }
-  
-  p {
-    margin: 12px 0;
-    font-size: 16px;
-    line-height: 1.5;
-  }
-  
-  a {
-    display: inline-block;
-    margin-top: 20px;
-    color: #b97a56;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
-  button, input[type="submit"] {
-    background-color: #b97a56;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
-  }
-  
-  button:hover, input[type="submit"]:hover {
-    background-color: #a5694d;
-  }
-  
-  input[type="text"], input[type="email"] {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-  }
-  
+  margin: 0;
+  padding: 0;
+  background-color: #b68452;
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  background-color: #fef3e2;
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 25px;
+  color: #3e2d20;
+  font-size: 22px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #3e2d20;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+button:hover {
+  background-color: #5a3c28;
+}
+
+small {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #444;
+}
