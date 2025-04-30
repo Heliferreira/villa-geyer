@@ -11,12 +11,32 @@
   <div class="container">
     <h2>Assinar clube de vantagens</h2>
     <form action="/assinar" method="POST">
-      <input type="text" name="nome" placeholder="Nome completo" required>
-      <input type="email" name="email" placeholder="E-mail" required>
-      <input type="text" name="cpf" placeholder="CPF" required>
-      <input type="text" name="phone" placeholder="Telefone" required>
+      <input type="text" id="nome" name="nome" placeholder="Nome completo" required>
+      <input type="email" id="email" name="email" placeholder="E-mail" required>
+      <input type="text" id="cpf" name="cpf" placeholder="CPF" required>
+      <input type="text" id="telefone" name="telefone" placeholder="Telefone" required>
       <input type="submit" value="Assinar">
     </form>
   </div>
+
+  <!-- SCRIPT DE MÁSCARA DE CPF E TELEFONE -->
+  <script>
+    const cpf = document.getElementById('cpf');
+    const telefone = document.getElementById('telefone');
+
+    cpf.addEventListener('input', () => {
+      let v = cpf.value.replace(/\D/g, '').slice(0, 11);
+      cpf.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, (_, p1, p2, p3, p4) => {
+        return `${p1}.${p2}.${p3}-${p4}`;
+      });
+    });
+
+    telefone.addEventListener('input', () => {
+      let v = telefone.value.replace(/\D/g, '').slice(0, 11);
+      telefone.value = v.length <= 10
+        ? v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+        : v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    });
+  </script>
 </body>
 </html>
