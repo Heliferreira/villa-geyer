@@ -9,7 +9,7 @@
 </head>
 <body>
   <div class="container">
-    <img src="https://i.imgur.com/F2H7QYX.png" alt="Logo Villa Geyer" class="logo"> <!-- Substitua pela logo se quiser -->
+    <img src="https://i.imgur.com/F2H7QYX.png" alt="Logo Villa Geyer" class="logo">
     <h2>Preencha os dados para assinar</h2>
 
     <form action="/assinar" method="POST">
@@ -24,9 +24,9 @@
   </div>
 
   <script>
-    const cpf = document.getElementById("cpf");
-    const telefone = document.getElementById("telefone");
-  
+    const cpf = document.getElementById('cpf');
+    const telefone = document.getElementById('telefone');
+
     // Máscara CPF
     cpf.addEventListener("input", () => {
       let v = cpf.value.replace(/\D/g, "").slice(0, 11);
@@ -34,7 +34,7 @@
         return `${p1}.${p2}.${p3}-${p4}`;
       });
     });
-  
+
     // Máscara Telefone
     telefone.addEventListener("input", () => {
       let v = telefone.value.replace(/\D/g, "").slice(0, 11);
@@ -45,4 +45,6 @@
       }
     });
   </script>
-  
+</body>
+</html>
+
